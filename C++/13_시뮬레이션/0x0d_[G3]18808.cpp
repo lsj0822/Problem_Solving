@@ -1,7 +1,5 @@
 #include<iostream>
-#include<algorithm>
-#define X first
-#define Y second
+#include<utility>
 
 using namespace std;
 
@@ -16,9 +14,7 @@ void sticker_rotate(int container[][11], int* r, int* c) {
 		}
 	}
 	copy(&new_container[0][0], &new_container[10][10], &container[0][0]);
-	int temp = *r;
-	*r = *c;
-	*c = temp;
+	swap(*r, *c);
 }
 bool detect_sticker(int container[][11], int x, int y, int r, int c) {
 	for (int i = 0; i < r; i++) {
@@ -28,18 +24,17 @@ bool detect_sticker(int container[][11], int x, int y, int r, int c) {
 	}
 	return true;
 }
-
 bool input_sticker(int container[][11], int r, int c) {
 	for (int i = 0; i <= n - r; i++) {
 		for (int j = 0; j <= m - c; j++) {
-				if (detect_sticker(container, i, j, r, c)) {
-					for (int x = 0; x < r; x++) {
-						for (int y = 0; y < c; y++) {
-							if(container[x][y])	notebook[i + x][j + y] = container[x][y];
-						}
+			if (detect_sticker(container, i, j, r, c)) {
+				for (int x = 0; x < r; x++) {
+					for (int y = 0; y < c; y++) {
+						if(container[x][y])	notebook[i + x][j + y] = container[x][y];
 					}
-					return true;
 				}
+				return true;
+			}
 		}
 	}
 	return false;
@@ -47,16 +42,15 @@ bool input_sticker(int container[][11], int r, int c) {
 int main() {
 	cin >> n >> m >> k;
 	while (k--) {
+		int sticker[11][11];
 		int r, c;
 		cin >> r >> c;
-		int sticker[11][11];
 		for (int i = 0; i < r; i++) {
 			for (int j = 0; j < c; j++) {
 				cin >> sticker[i][j];
 			}
 		}
-		int rot = 4;
-		while (rot--) {
+		for(int rot = 0; rot < 4; rot++) {
 			if (input_sticker(sticker, r, c)) break;
 			sticker_rotate(sticker, &r, &c);
 		}
